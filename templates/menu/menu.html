@@ -1,0 +1,12 @@
+<ul>
+  {% for node in menu_items %}
+    <li>
+      <a href="{{ node.url }}" {% if node.is_active %}style="font-weight: bold"{% endif %}>
+        {{ node.item.title }}
+      </a>
+      {% if node.children and node.item.is_open %}
+        {% include "menu/menu.html" with menu_items=node.children %}
+      {% endif %}
+    </li>
+  {% endfor %}
+</ul>
