@@ -22,16 +22,8 @@ class MenuItem(models.Model):
         on_delete=models.CASCADE,
         related_name='items'
     )
-    url = models.CharField(
-        max_length=200,
-        blank=True,
-        help_text='Либо абсолютный URL, либо имя URL'
-    )
-    named_url = models.BooleanField(
-        default=False,
-        help_text='Если True — url считается именем URL'
-    )
     is_open = False
+    cldrn = None
 
     def __str__(self):
         return self.title

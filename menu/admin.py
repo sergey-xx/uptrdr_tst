@@ -14,5 +14,5 @@ class MenuAdmin(admin.ModelAdmin):
 
 @admin.register(MenuItem)
 class MenuItemAdmin(admin.ModelAdmin):
-    list_display = ['title', 'menu', 'parent', 'url', 'named_url']
+    list_display = ['title', 'menu', 'parent']
     list_filter = ['menu']

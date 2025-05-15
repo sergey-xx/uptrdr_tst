@@ -1,7 +1,4 @@
-import re
-
 from django import template
-from django.urls import reverse
 
 from menu.models import MenuItem
 
@@ -10,6 +7,12 @@ register = template.Library()
 
 @register.inclusion_tag('menu/menu.html', takes_context=True)
 def draw_menu(context, menu_name):
+
+    def get_id(context):
+        for _ in context:
+            current_id = context.get('id')
+            if current_id:
+                return current_id
 
     def open_items(items, currend_id):
         if not currend_id:
@@ -25,18 +28,12 @@ def draw_menu(context, menu_name):
         tree = []
         for item in items:
             if item.parent_id == (parent.id if parent else None):
-                tree.append({
-                    'item': item,
-                    'children': build_tree(items, item),
-                    'is_open': item.is_open,
-                    'url': reverse('menu:item', kwargs={'pk': item.pk}),
-                    'is_active': True,
-                })
+                item.cldrn = build_tree(items, item)
+                tree.append(item)
         return tree
 
     request = context['request']
-    current_id_str = re.sub(r'\D', '', request.path)
-    current_id = int(current_id_str) if current_id_str else None
+    current_id = get_id(context)
     items = MenuItem.objects.filter(menu__name=menu_name)
     if not items:
         return {'menu_items': []}
